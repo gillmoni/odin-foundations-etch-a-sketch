@@ -1,41 +1,7 @@
-let gridsize = 64;
+let gridsize = getGridSize();
 window.onload = function() {
-    const container = document.querySelector(".grid-container");
-  
     // Loop through and create 16x16 grid of divs
-    makegrid(container, gridsize);
-  
-    // Add event listener for mouseover on each grid item
-    const items = document.querySelectorAll(".grid-item");
-    items.forEach(item => {
-      item.addEventListener("mouseover", function (e) {
-        // Add a trail class to the item and its adjacent items
-        const color = randomRGB()
-        e.target.style.background = color;
-        
-        sleep(1000).then(() => {
-            e.target.style.background = '';
-        });
-
-        item.classList.add("trail");
-        const row = item.parentElement;
-        const col = Array.from(row.children).indexOf(item);
-        if (col > 0) row.children[col - 1].classList.add("trail");
-        if (col < gridsize - 1) row.children[col + 1].classList.add("trail");
-        const prevRow = row.previousElementSibling;
-        const nextRow = row.nextElementSibling;
-        if (prevRow) {
-          prevRow.children[col].classList.add("trail");
-          if (col > 0) prevRow.children[col - 1].classList.add("trail");
-          if (col < gridsize - 1) prevRow.children[col + 1].classList.add("trail");
-        }
-        if (nextRow) {
-          nextRow.children[col].classList.add("trail");
-          if (col > 0) nextRow.children[col - 1].classList.add("trail");
-          if (col < gridsize - 1) nextRow.children[col + 1].classList.add("trail");
-        }
-      });
-    });
+    makegrid(gridsize);
   };
 
   function sleep (time) {
@@ -49,16 +15,44 @@ window.onload = function() {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function makegrid (container, gridsize) {
+function makegrid (gridsize) {
+    const container = document.querySelector(".grid-container");
+     // Clear any existing grid items
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
     for (let i = 0; i < gridsize * gridsize; i++) {
-    const div = document.createElement("div");
-    div.classList.add("grid-item");
-    container.appendChild(div);
+        const div = document.createElement("div");
+        div.classList.add("grid-item");
+        container.appendChild(div);
+        colorize()
     }
 }
 
-
 function getGridSize() {
-    const btn = document.querySelector('#btn');
+    console.log("I've called here")
+    const form = document.querySelector("form");
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const input = document.querySelector("#grid-size");
+      const size = parseInt(input.value, 10);
+      makegrid(size);
+    });
+}
 
+function colorize() {
+    // Add event listener for mouseover on each grid item
+    const items = document.querySelectorAll(".grid-item");
+    items.forEach(item => {
+    item.addEventListener("mouseover", function (e) {
+        // Add a trail class to the item and its adjacent items
+        const color = randomRGB()
+        e.target.style.background = color;
+        
+        sleep(1000).then(() => {
+            e.target.style.background = '';
+        });
+    });
+    });
 }
