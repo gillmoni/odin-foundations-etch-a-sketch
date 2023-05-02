@@ -1,0 +1,23 @@
+/* Style the container element */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(64, 1fr);
+    gap: 1px;
+    background-color: #ddd;
+    padding: 0px;
+  }
+  
+  /* Style the div elements inside the container */
+  .grid-item {
+    background-color: #fff;
+    border: 0.5px solid #0fc47041;
+    padding: 0;
+  }
+  
+  /* Make the div elements square */
+  .grid-item:before {
+    content: "";
+    display: block;
+    padding: 19%;
+  }
+  
